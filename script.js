@@ -24,6 +24,10 @@ document.addEventListener('DOMContentLoaded', function() {
     renderTables();
     document.getElementById('addStaff').addEventListener('click', addNewStaff);
     document.getElementById('resetData').addEventListener('click', resetAllData);
+        const exportBtn = document.getElementById('exportExcelBtn');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', exportExcel);
+
 });
 
 // Get Txn Score based on mistake count
@@ -259,3 +263,69 @@ document.addEventListener('blur', function(e) {
         e.target.value = formatCurrency(number);
     }
 }, true);
+
+function exportExcel() {
+    if (typeof XLSX === "undefined") {
+        alert("Library Excel belum ter-load!");
+        return;
+    }
+
+    if (!staffData || staffData.length === 0) {
+        alert("Tidak ada data untuk diexport");
+        return;
+    }
+
+    const wb = XLSX.utils.book_new();
+
+    // ===== SHEET 1: INPUT & SCORE =====
+    const sheet1 = [
+        [
+            "Nama Staf",
+            "Mistake Txn",
+            "Mistake Amount",
+            "Txn Score",
+            "Amount Score",
+            "AVG Score",
+            "Weighted Score"
+        ],
+        ...staffData.map(s => [
+            s.nama,
+            s.mistakeTxn,
+            s.mistakeAmount,
+            s.txnScore,
+            s.amountScore,
+            s.avgScore,
+            s.weightedScore
+        ])
+    ];
+
+    const ws1 = XLSX.utils.aoa_to_sheet(sheet1);
+    XLSX.utils.book_append_sheet(wb, ws1, "Input & Score");
+
+    // ===== SHEET 2: FINAL DECISION =====
+    const sheet2 = [
+        [
+            "Nama Staf",
+            "By Txn Amount",
+            "By Amount Amount",
+            "Average Amount",
+            "Weighted Amount",
+            "Final Decision",
+            "Final Amount"
+        ],
+        ...staffData.map(s => [
+            s.nama,
+            s.byTxnAmount,
+            s.byAmountAmount,
+            s.averageAmount,
+            s.weightedAmount,
+            s.finalDecision,
+            getFinalAmount(s)
+        ])
+    ];
+
+    const ws2 = XLSX.utils.aoa_to_sheet(sheet2);
+    XLSX.utils.book_append_sheet(wb, ws2, "Final Decision");
+
+    XLSX.writeFile(wb, "Mistake_Count_Report.xlsx");
+}
