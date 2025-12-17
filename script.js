@@ -22,12 +22,17 @@ let staffCounter = 0;
 document.addEventListener('DOMContentLoaded', function() {
     loadData();
     renderTables();
-    document.getElementById('addStaff').addEventListener('click', addNewStaff);
-    document.getElementById('resetData').addEventListener('click', resetAllData);
-        const exportBtn = document.getElementById('exportExcelBtn');
+
+    document.getElementById('addStaff')
+        .addEventListener('click', addNewStaff);
+
+    document.getElementById('resetData')
+        .addEventListener('click', resetAllData);
+
+    const exportBtn = document.getElementById('exportExcelBtn');
     if (exportBtn) {
         exportBtn.addEventListener('click', exportExcel);
-
+    }
 });
 
 // Get Txn Score based on mistake count
