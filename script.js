@@ -297,7 +297,7 @@ function exportExcel() {
             "Weighted Score"
         ],
         ...staffData.map(s => [
-            s.name || s.nama,
+            s.nama,
             s.mistakeTxn,
             s.mistakeAmount,
             s.txnScore,
@@ -325,16 +325,29 @@ function exportExcel() {
             "Final Amount"
         ],
         ...staffData.map(s => {
-            const d = calculateDeductions(s);
-            const finalAmount = getFinalAmount(s, d);
+            let finalAmount;
+            switch (s.finalDecision) {
+                case 'By Txn':
+                    finalAmount = s.byTxnAmount;
+                    break;
+                case 'By Amount':
+                    finalAmount = s.byAmountAmount;
+                    break;
+                case 'Weighted':
+                    finalAmount = s.weightedAmount;
+                    break;
+                case 'Average':
+                default:
+                    finalAmount = s.averageAmount;
+            }
 
             return [
-                s.name || s.nama,
-                d.byTxn,
-                d.byAmount,
-                d.average,
-                d.weighted,
-                s.decision,
+                s.nama,
+                s.byTxnAmount,
+                s.byAmountAmount,
+                s.averageAmount,
+                s.weightedAmount,
+                s.finalDecision,
                 finalAmount
             ];
         })
