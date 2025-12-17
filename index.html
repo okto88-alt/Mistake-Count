@@ -3,153 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mistake Count Dashboard</title>
+    <title>MISTAKE COUNT - Dashboard Kinerja Staf</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="dashboard-container">
-        <!-- Header -->
-        <header class="dashboard-header">
-            <div class="header-content">
-                <h1 class="main-title">MISTAKE COUNT</h1>
-                <p class="subtitle">Dashboard Kinerja Staf dengan Perhitungan Otomatis</p>
-            </div>
-        </header>
+    <div class="header">
+        <h1>MISTAKE COUNT</h1>
+        <p>Dashboard Kinerja Staf dengan Perhitungan Otomatis</p>
+    </div>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Section 1: Scoring Rules -->
-            <section class="dashboard-section">
-                <h2 class="section-title">Scoring Rules</h2>
-                <div class="rules-container">
-                    <div class="rule-card">
-                        <h3>Mistake by Transaction</h3>
-                        <table class="rules-table">
-                            <thead>
-                                <tr>
-                                    <th>Mistake Count</th>
-                                    <th>Score</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>0</td><td>0.0</td></tr>
-                                <tr><td>1-2</td><td>0.3</td></tr>
-                                <tr><td>3-5</td><td>0.5</td></tr>
-                                <tr><td>6-7</td><td>0.8</td></tr>
-                                <tr><td>&gt;7</td><td>1.0</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="rule-card">
-                        <h3>Mistake by Amount</h3>
-                        <table class="rules-table">
-                            <thead>
-                                <tr>
-                                    <th>Amount Range (IDR)</th>
-                                    <th>Score</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>&lt; Rp 100K</td><td>0.0</td></tr>
-                                <tr><td>Rp 100K – 200K</td><td>0.3</td></tr>
-                                <tr><td>Rp 201K – 500K</td><td>0.5</td></tr>
-                                <tr><td>Rp 501K – 2JT</td><td>0.8</td></tr>
-                                <tr><td>&gt; Rp 2JT</td><td>1.0</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Section 2: Staff Input Table -->
-            <section class="dashboard-section">
-                <div class="section-header">
-                    <h2 class="section-title">Staff Performance Input</h2>
-                    <button class="btn btn-primary" id="addRowBtn">+ Add Staff</button>
-                </div>
-                <div class="table-container">
-                    <table class="data-table" id="staffTable">
+    <div class="container">
+        <!-- Section 1: Scoring Rules -->
+        <div class="section">
+            <h2>1. Tabel Aturan Skor (Logika Konversi)</h2>
+            
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <h3>Mistake by Txn</h3>
+                    <table class="rule-table">
                         <thead>
                             <tr>
-                                <th>Staff Name</th>
-                                <th>Mistake Txn</th>
-                                <th>Mistake Amount (IDR)</th>
-                                <th>Txn Score</th>
-                                <th>Amount Score</th>
-                                <th>Average Score</th>
-                                <th>Weighted Score</th>
-                                <th>Deduction (Rp)</th>
-                                <th>Action</th>
+                                <th>Range Transaksi</th>
+                                <th>Persentase</th>
+                                <th>Skor Desimal</th>
                             </tr>
                         </thead>
-                        <tbody id="staffTableBody">
-                            <!-- Rows will be dynamically added here -->
+                        <tbody>
+                            <tr>
+                                <td>1-2 Transaksi</td>
+                                <td>30%</td>
+                                <td>0.3</td>
+                            </tr>
+                            <tr>
+                                <td>3-5 Transaksi</td>
+                                <td>50%</td>
+                                <td>0.5</td>
+                            </tr>
+                            <tr>
+                                <td>6-7 Transaksi</td>
+                                <td>80%</td>
+                                <td>0.8</td>
+                            </tr>
+                            <tr>
+                                <td>>7 Transaksi</td>
+                                <td>100%</td>
+                                <td>1.0</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
-            </section>
 
-            <!-- Section 3: Final Decision -->
-            <section class="dashboard-section">
-                <h2 class="section-title">Final Decision</h2>
-                <div class="decision-container">
-                    <div class="decision-table-container">
-                        <table class="decision-table" id="decisionTable">
-                            <thead>
-                                <tr>
-                                    <th>Staff Name</th>
-                                    <th>By Txn Amount</th>
-                                    <th>By Nominal Amount</th>
-                                    <th>Average</th>
-                                    <th>Weighted Result</th>
-                                    <th>Final Decision</th>
-                                    <th>Final Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody id="decisionTableBody">
-                                <!-- Decision rows will be dynamically added here -->
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="rule-card">
+                    <h3>Mistake by Amount</h3>
+                    <table class="rule-table">
+                        <thead>
+                            <tr>
+                                <th>Range Nominal</th>
+                                <th>Persentase</th>
+                                <th>Skor Desimal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Rp 100K - Rp 200K</td>
+                                <td>30%</td>
+                                <td>0.3</td>
+                            </tr>
+                            <tr>
+                                <td>Rp 201K - Rp 500K</td>
+                                <td>50%</td>
+                                <td>0.5</td>
+                            </tr>
+                            <tr>
+                                <td>Rp 501K - Rp 2.000K</td>
+                                <td>80%</td>
+                                <td>0.8</td>
+                            </tr>
+                            <tr>
+                                <td>> Rp 2.001K</td>
+                                <td>100%</td>
+                                <td>1.0</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-            </section>
+            </div>
+        </div>
 
-            <!-- Summary Cards -->
-            <section class="dashboard-section">
-                <h2 class="section-title">Summary</h2>
-                <div class="summary-container">
-                    <div class="summary-card">
-                        <div class="summary-icon">👥</div>
-                        <div class="summary-content">
-                            <h3>Total Staff</h3>
-                            <span class="summary-value" id="totalStaff">0</span>
-                        </div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-icon">💰</div>
-                        <div class="summary-content">
-                            <h3>Total Deduction</h3>
-                            <span class="summary-value" id="totalDeduction">Rp 0</span>
-                        </div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-icon">📊</div>
-                        <div class="summary-content">
-                            <h3>Average Deduction</h3>
-                            <span class="summary-value" id="averageDeduction">Rp 0</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
+        <!-- Section 2: Input & Calculation -->
+        <div class="section">
+            <h2>2. Tabel Input & Perhitungan Utama</h2>
+            
+            <div class="action-buttons">
+                <button id="addStaff" class="btn btn-green">TAMBAH STAF BARU</button>
+                <button id="resetData" class="btn btn-orange">RESET SEMUA DATA</button>
+            </div>
 
-            <!-- Control Buttons -->
-            <section class="dashboard-section">
-                <div class="control-buttons">
-                    <button class="btn btn-secondary" id="resetBtn">Reset All Data</button>
-                    <button class="btn btn-success" id="exportBtn">Export Data</button>
-                </div>
-            </section>
-        </main>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nama Staf</th>
+                            <th>Mistake Txn</th>
+                            <th>Mistake Amount (Rp)</th>
+                            <th>Txn Score</th>
+                            <th>Amount Score</th>
+                            <th>AVG Score</th>
+                            <th>Weighted Score</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inputTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 3: Final Decision -->
+        <div class="section">
+            <h2>3. Tabel Keputusan Akhir (Nominal Potongan)</h2>
+            
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nama Staf</th>
+                            <th>By Txn Score</th>
+                            <th>By Amount Score</th>
+                            <th>Average</th>
+                            <th>Weighted Score</th>
+                            <th>Final Decision</th>
+                            <th>Final Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="decisionTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>
