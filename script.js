@@ -282,8 +282,11 @@ function exportExcel() {
 
     const wb = XLSX.utils.book_new();
 
-    // ===== SHEET 1: INPUT & SCORE =====
-    const sheet1 = [
+    /* =========================
+       SHEET 1 — INPUT & SCORE
+       (TABEL #2)
+    ========================= */
+    const sheetInput = [
         [
             "Nama Staf",
             "Mistake Txn",
@@ -294,7 +297,7 @@ function exportExcel() {
             "Weighted Score"
         ],
         ...staffData.map(s => [
-            s.nama,
+            s.name || s.nama,
             s.mistakeTxn,
             s.mistakeAmount,
             s.txnScore,
@@ -304,11 +307,14 @@ function exportExcel() {
         ])
     ];
 
-    const ws1 = XLSX.utils.aoa_to_sheet(sheet1);
-    XLSX.utils.book_append_sheet(wb, ws1, "Input & Score");
+    const wsInput = XLSX.utils.aoa_to_sheet(sheetInput);
+    XLSX.utils.book_append_sheet(wb, wsInput, "Input & Score");
 
-    // ===== SHEET 2: FINAL DECISION =====
-    const sheet2 = [
+    /* =========================
+       SHEET 2 — FINAL DECISION
+       (TABEL #3)
+    ========================= */
+    const sheetFinal = [
         [
             "Nama Staf",
             "By Txn Amount",
@@ -318,19 +324,27 @@ function exportExcel() {
             "Final Decision",
             "Final Amount"
         ],
-        ...staffData.map(s => [
-            s.nama,
-            s.byTxnAmount,
-            s.byAmountAmount,
-            s.averageAmount,
-            s.weightedAmount,
-            s.finalDecision,
-            getFinalAmount(s)
-        ])
+        ...staffData.map(s => {
+            const d = calculateDeductions(s);
+            const finalAmount = getFinalAmount(s, d);
+
+            return [
+                s.name || s.nama,
+                d.byTxn,
+                d.byAmount,
+                d.average,
+                d.weighted,
+                s.decision,
+                finalAmount
+            ];
+        })
     ];
 
-    const ws2 = XLSX.utils.aoa_to_sheet(sheet2);
-    XLSX.utils.book_append_sheet(wb, ws2, "Final Decision");
+    const wsFinal = XLSX.utils.aoa_to_sheet(sheetFinal);
+    XLSX.utils.book_append_sheet(wb, wsFinal, "Final Decision");
 
+    /* =========================
+       DOWNLOAD
+    ========================= */
     XLSX.writeFile(wb, "Mistake_Count_Report.xlsx");
 }
